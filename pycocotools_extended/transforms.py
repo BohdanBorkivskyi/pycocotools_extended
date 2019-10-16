@@ -5,22 +5,19 @@ def create_transform(aug_fn, size=None, normalize=True, bboxes=True, label_field
                      std='imagenet', min_visibility=0.):
     pipeline = []
 
-    if size is not None:
-        if type(size) is int:
-            resize_fn = albu.Resize(size, size)
-        else:
-            resize_fn = albu.Resize(*size)
+    if size:
+        if isinstance(size, int):
+            size = (size, size)
+
+        resize_fn = albu.Resize(*size)
         aug_fn.insert(0, resize_fn)
 
-    if bboxes:
-        bbox_params = {
-            'format': 'coco',
-            'min_visibility': min_visibility,
-            'label_fields': [label_field]
-        }
-        aug_fn = albu.Compose(aug_fn, bbox_params=bbox_params)
-    else:
-        aug_fn = albu.Compose(aug_fn)
+    bbox_params = {
+        'format': 'coco',
+        'min_visibility': min_visibility,
+        'label_fields': [label_field]
+    } if bboxes else None
+    aug_fn = albu.Compose(aug_fn, bbox_params=bbox_params)
     pipeline.append(aug_fn)
 
     if normalize:

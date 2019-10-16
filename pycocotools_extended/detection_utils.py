@@ -17,7 +17,7 @@ def display_bboxes_by_img_id(data, img_id, imgs_path, transform=None, ax=None, f
     if colors is None:
         colors = common.get_colors(len(cat_names))
 
-    if transform is not None:
+    if transform:
         out = transform(image=img, bboxes=bboxes, category_id=categs)
         img, bboxes, categs = out['image'], out['bboxes'], out['category_id']
 
@@ -38,8 +38,8 @@ def display_bboxes_by_img_ids(data, img_ids, imgs_path, transform=None, **kwargs
     n_rows = np.ceil(len(img_ids) / float(n_cols))
     fig = plt.figure(figsize=(n_cols * 5, n_rows * 5))
 
-    for i, img_id in enumerate(img_ids):
-        ax = fig.add_subplot(n_rows, n_cols, i + 1)
+    for i, img_id in enumerate(img_ids, start=1):
+        ax = fig.add_subplot(n_rows, n_cols, i)
         ax.set_title("Image %d" % img_id)
         display_bboxes_by_img_id(data, img_id, imgs_path=imgs_path, transform=transform, ax=ax, **kwargs)
     plt.show()
