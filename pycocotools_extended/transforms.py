@@ -16,7 +16,7 @@ def create_transform(aug_fn, size=None, normalize=True, bboxes=True, label_field
         'format': 'coco',
         'min_visibility': min_visibility,
         'label_fields': [label_field]
-    } if bboxes else None
+    } if bboxes else {}
     aug_fn = albu.Compose(aug_fn, bbox_params=bbox_params)
     pipeline.append(aug_fn)
 
